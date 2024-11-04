@@ -32,3 +32,44 @@ int main() {
 
     return 0;
 }
+
+**** In JAVA PROGRAMMING ****
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class SubstringCounter {
+    public static int countSubstringsWithAllChars(String s) {
+        int left = 0, total = 0;
+        HashMap<Character, Integer> charCount = new HashMap<>();
+
+        for (int right = 0; right < s.length(); right++) {
+            // Add the current character to the count
+            charCount.put(s.charAt(right), charCount.getOrDefault(s.charAt(right), 0) + 1);
+
+            // Check if we have at least one of each character a, b, c
+            while (charCount.getOrDefault('a', 0) > 0 && 
+                   charCount.getOrDefault('b', 0) > 0 && 
+                   charCount.getOrDefault('c', 0) > 0) {
+                // If we have a valid window, count the number of valid substrings
+                total += (s.length() - right);
+                // Remove the leftmost character and shrink the window
+                charCount.put(s.charAt(left), charCount.get(s.charAt(left)) - 1);
+                if (charCount.get(s.charAt(left)) == 0) {
+                    charCount.remove(s.charAt(left));
+                }
+                left++;
+            }
+        }
+
+        return total;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String s = scanner.nextLine();
+        int result = countSubstringsWithAllChars(s);
+        System.out.println(result);
+        scanner.close();
+    }
+}
