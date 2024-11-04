@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+vector<int> findAnagrams(string &A, string &B) {
+    vector<int> result;
+    if (A.size() < B.size()) 
+    {
+        return result;
+    }
+    unordered_map<char, int> bCount, windowCount;
+    // Count characters in B
+    for (char c : B) {
+        bCount[c]++;
+    }
+    int bLength = B.size();
+    int aLength = A.size();
+    // Initialize the first window
+    for (int i = 0; i < bLength; i++) {
+        windowCount[A[i]]++;
+    }
+    // Check if the first window is an anagram
+    if (windowCount == bCount) {
+        result.push_back(0);
+    }
+    // Slide the window over A
+    for (int i = bLength; i < aLength; i++) {
+        // Add the next character in the window
+        windowCount[A[i]]++;
+
+        // Remove the character that is left out of the window
+        windowCount[A[i - bLength]]--;
+
+        // If the count becomes zero, remove it from the map
+        if (windowCount[A[i - bLength]] == 0) {
+            windowCount.erase(A[i - bLength]);
+        }
+
+        // Compare window with bCount
+        if (windowCount == bCount) {
+            result.push_back(i - bLength + 1);
+        }
+    }
+
+    return result;
+}
+
+int main() {
+    string A, B;
+    cin >> A;
+    cin >> B;
+    vector<int> indices = findAnagrams(A, B);
+    cout << "[";
+    for (size_t i = 0; i < indices.size(); i++) {
+        cout << indices[i];
+        if (i < indices.size() - 1) {
+            cout << ", ";
+        }
+    }
+    cout << "]" << std::endl;
+
+    return 0;
+}
