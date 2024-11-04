@@ -61,3 +61,79 @@ int main() {
 
     return 0;
 }
+
+
+**** IN JAVA PROGRAMMING ****
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
+
+public class AnagramFinder {
+    public static List<Integer> findAnagrams(String A, String B) {
+        List<Integer> result = new ArrayList<>();
+        if (A.length() < B.length()) {
+            return result;
+        }
+
+        HashMap<Character, Integer> bCount = new HashMap<>();
+        HashMap<Character, Integer> windowCount = new HashMap<>();
+
+        // Count characters in B
+        for (char c : B.toCharArray()) {
+            bCount.put(c, bCount.getOrDefault(c, 0) + 1);
+        }
+
+        int bLength = B.length();
+        int aLength = A.length();
+
+        // Initialize the first window
+        for (int i = 0; i < bLength; i++) {
+            windowCount.put(A.charAt(i), windowCount.getOrDefault(A.charAt(i), 0) + 1);
+        }
+
+        // Check if the first window is an anagram
+        if (windowCount.equals(bCount)) {
+            result.add(0);
+        }
+
+        // Slide the window over A
+        for (int i = bLength; i < aLength; i++) {
+            // Add the next character in the window
+            windowCount.put(A.charAt(i), windowCount.getOrDefault(A.charAt(i), 0) + 1);
+
+            // Remove the character that is left out of the window
+            char leftChar = A.charAt(i - bLength);
+            windowCount.put(leftChar, windowCount.get(leftChar) - 1);
+
+            // If the count becomes zero, remove it from the map
+            if (windowCount.get(leftChar) == 0) {
+                windowCount.remove(leftChar);
+            }
+
+            // Compare window with bCount
+            if (windowCount.equals(bCount)) {
+                result.add(i - bLength + 1);
+            }
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String A = scanner.nextLine();
+        String B = scanner.nextLine();
+        List<Integer> indices = findAnagrams(A, B);
+        System.out.print("[");
+        for (int i = 0; i < indices.size(); i++) {
+            System.out.print(indices.get(i));
+            if (i < indices.size() - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println("]");
+        scanner.close();
+    }
+}
