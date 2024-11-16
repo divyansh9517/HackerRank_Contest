@@ -1,0 +1,43 @@
+import java.util.Scanner;
+import java.util.regex.*;
+
+public class DecimalNumberValidator {
+
+    public static int isValidDecimal(String s) {
+        // Check for null or empty input
+        if (s == null || s.trim().isEmpty()) {
+            return 0;
+        }
+
+        // Trim leading and trailing spaces
+        s = s.trim();
+
+        // Regular expression for a valid decimal number
+        String decimalRegex = "^[+-]?(\\d+(\\.\\d*)?|\\.\\d+)([eE][+-]?\\d+)?$";
+
+        // Use Pattern and Matcher to validate the string
+        Pattern pattern = Pattern.compile(decimalRegex);
+        Matcher matcher = pattern.matcher(s);
+
+        // Return 1 if the string matches the regex, otherwise 0
+        return matcher.matches() ? 1 : 0;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            // Read input
+            String input = sc.nextLine();
+
+            // Validate and print result
+            int result = isValidDecimal(input);
+            System.out.println(result);
+        } catch (Exception e) {
+            // Handle unexpected exceptions
+            System.out.println(0);
+        } finally {
+            sc.close();
+        }
+    }
+}
