@@ -1,0 +1,33 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+int subarraysDivByK(vector<int>& A, int K) {
+    unordered_map<int, int> countMap;
+    countMap[0] = 1;
+    int count = 0, sum = 0;
+
+    for (int num : A) {
+        sum += num;
+        int mod = (sum % K + K) % K;
+        count += countMap[mod];
+        countMap[mod]++;
+    }
+    
+    return count;
+}
+
+int main() {
+    int N;
+    cin >> N;
+    vector<int> A(N);
+    for (int i = 0; i < N; i++) {
+        cin >> A[i];
+    }
+    int K;
+    cin >> K;
+    cout << subarraysDivByK(A, K) << endl;
+    return 0;
+}
