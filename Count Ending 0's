@@ -1,0 +1,22 @@
+#include <iostream>
+using namespace std;
+
+int trailing_zeros(int N) {
+    int count = 0;
+    int power_of_5 = 5;
+
+    
+    while (N >= power_of_5) {
+        count += N / power_of_5; 
+        power_of_5 *= 5;        
+    }
+
+    return count;
+}
+
+int main() {
+    int N;
+    cin >> N; 
+    cout << trailing_zeros(N) << endl; 
+    return 0;
+}
